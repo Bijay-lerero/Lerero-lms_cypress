@@ -29,6 +29,9 @@ describe('Successfully create course', () => {
     CreateCoursePage.uploadLogoImage(courseLogo);
     CreateCoursePage.enterCourseDetails(courseTitle, courseDescription);
     CreateCoursePage.saveAndProceed();
+    CourseManagementPage.navigateToCourseManagement();
+    CreateCoursePage.validateAdditionOfCourse(courseTitle);
+
 
     // Step 3: Add a Learning Journey Module
     ModulePage.addLearningJourneyModule(moduleTitle, moduleDescription, moduleThumbnail);

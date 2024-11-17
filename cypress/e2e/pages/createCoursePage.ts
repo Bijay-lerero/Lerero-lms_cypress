@@ -8,6 +8,9 @@ class CreateCoursePage {
       saveAndProceedButton: () => cy.get('[data-testid="button-saveAndProceed"]'),
       successModalTitle: () => cy.get('.modal__success--title'),
       successModalButton: () => cy.get('.modal__success--button'),
+      searchBarInputField: () => cy.getElement('input-search_bar'),
+      searchResultCount: () => cy.getElement('count-search_result'),
+      searchResult: () => cy.getElement('text-get_course_title'),
     };
   
     uploadCoverImage(imagePath: string): void {
@@ -35,7 +38,19 @@ class CreateCoursePage {
       this.elements.successModalTitle().should('contain', 'Create course was successful.');
       this.elements.successModalButton().click();
     }
+
+  validateAdditionOfCourse(title: string): void {
+    this.elements.searchBarInputField().type(title);
+    this.elements.searchResultCount().should('contain','1 Courses')
+    this.elements.searchResult()
+      .invoke('text') // Get the truncated text
+      .then((visibleText) => {
+        console.log(visibleText)
+        expect(title.startsWith(visibleText)).to.be.true;
+      });
+    this.elements.searchResult().click()
   }
-  
+}
+
   export default new CreateCoursePage();
   
