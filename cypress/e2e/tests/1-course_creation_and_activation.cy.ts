@@ -29,6 +29,7 @@ describe('Successfully create course', () => {
     CreateCoursePage.uploadLogoImage(courseLogo);
     CreateCoursePage.enterCourseDetails(courseTitle, courseDescription);
     CreateCoursePage.saveAndProceed();
+    //CreateCoursePage.validatePreviewOfCourse(courseTitle, courseDescription);
     CourseManagementPage.navigateToCourseManagement();
     CreateCoursePage.validateAdditionOfCourse(courseTitle);
 
@@ -51,6 +52,8 @@ describe('Successfully create course', () => {
       const expectedTexts = [moduleTitle];
       cy.wrap($el).should('have.text', expectedTexts[index]);
     });
+
+    //Verify the preview of the created course
 
     // Step 6: Navigate to Marketplace Management
     MarketplaceManagementPage.navigateToMarketplaceManagement();
