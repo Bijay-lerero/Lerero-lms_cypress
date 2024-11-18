@@ -6,13 +6,14 @@ import MarketplaceManagementPage from '../pages/marketplaceManagementPage';
 import { faker } from '@faker-js/faker';
 import 'cypress-file-upload';
 
+
 const courseCover: string = 'course_cover.jpg';
 const courseLogo: string = 'logo_course.jpg';
 const moduleThumbnail: string = 'logo_course.jpg';
-const courseTitle: string = 'Automation ' + faker.company.catchPhrase();
 const courseDescription: string = faker.lorem.paragraphs(3);
 const moduleTitle: string = faker.lorem.words(3);
 const moduleDescription: string = faker.lorem.paragraph();
+const courseTitle: string = 'Automation ' + faker.company.catchPhrase();
 
 describe('Successfully create course', () => {
   before(() => {
@@ -25,37 +26,34 @@ describe('Successfully create course', () => {
     CourseManagementPage.clickCreateCourse();
 
     // Step 2: Create a Course
-    CreateCoursePage.uploadCoverImage(courseCover);
-    CreateCoursePage.uploadLogoImage(courseLogo);
-    CreateCoursePage.enterCourseDetails(courseTitle, courseDescription);
-    CreateCoursePage.saveAndProceed();
-    //CreateCoursePage.validatePreviewOfCourse(courseTitle, courseDescription);
+    CreateCoursePage.createCourse(courseCover, courseLogo, courseTitle, courseDescription);
+    
+    //Assert the creation of new course
+    CreateCoursePage.validatePreviewOfCourse(courseTitle, courseDescription);
     CourseManagementPage.navigateToCourseManagement();
     CreateCoursePage.validateAdditionOfCourse(courseTitle);
-
 
     // Step 3: Add a Learning Journey Module
     ModulePage.addLearningJourneyModule(moduleTitle, moduleDescription, moduleThumbnail);
 
     // Step 4: Activate the Course
-    cy.get('[data-testid="button-activate"]').click();
-    cy.get('[data-testid="messaget-activation_confirmation"]').should('contain', 'Are you sure want to activate this course?');
-    cy.get('[data-testid="button-yes"]').click();
-    cy.get('[data-testid="message-successful"]').should('contain', 'Activate course was successful.');
-    cy.get('[data-testid="button-okay"]').click();
+    CreateCoursePage.activateCourse();
 
     // Verify activation
-    cy.get('[data-testid="button-activate"]').should('not.exist');
+    cy.getElement('button-activate').should('not.exist');
 
-    // Step 5: Verify added module
-    cy.get('[data-testid="label-moduleTitle"]').each(($el, index) => {
+    // Verify added module
+    cy.getElement('label-moduleTitle').each(($el, index) => {
       const expectedTexts = [moduleTitle];
       cy.wrap($el).should('have.text', expectedTexts[index]);
     });
 
-    //Verify the preview of the created course
-
-    // Step 6: Navigate to Marketplace Management
+    // Step : Navigate to Marketplace Management
     MarketplaceManagementPage.navigateToMarketplaceManagement();
+    cy.fixture('courseDetails.json').then((expectedDetails) => {
+      MarketplaceManagementPage.validateAdditionOfCourse(expectedDetails.courseTitle);
+      MarketplaceManagementPage.validateDetailsOfAddedCourse(expectedDetails);
+    });
+
   });
 });
