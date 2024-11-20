@@ -48,12 +48,14 @@ describe('Successfully create course', () => {
       cy.wrap($el).should('have.text', expectedTexts[index]);
     });
 
-    // Step : Navigate to Marketplace Management
+    // Step 5: Navigate to Marketplace Management
     MarketplaceManagementPage.navigateToMarketplaceManagement();
     cy.fixture('courseDetails.json').then((expectedDetails) => {
       MarketplaceManagementPage.validateAdditionOfCourse(expectedDetails.courseTitle);
       MarketplaceManagementPage.validateDetailsOfAddedCourse(expectedDetails);
+      MarketplaceManagementPage.addPriceToCourse(expectedDetails.courseTitle);
     });
+    
 
   });
 });

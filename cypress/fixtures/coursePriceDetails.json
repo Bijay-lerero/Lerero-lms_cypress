@@ -1,0 +1,17 @@
+{
+    "researcherName": "John Doe",
+    "researcherEmail": "john.doe@example.com",
+    "originalPrice": "100",
+    "discountedPrice": "80",
+    "duration": [
+      {
+        "value": "10",
+        "type": "Hours"
+      },
+      {
+        "value": "5",
+        "type": "Days"
+      }
+    ]
+  }
+  
